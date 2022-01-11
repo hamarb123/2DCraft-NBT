@@ -1,0 +1,4 @@
+# This is a text file
+
+# Auto detect text files and perform LF normalization
+* text=auto
