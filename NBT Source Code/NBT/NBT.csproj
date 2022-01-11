@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<ProductVersion>8.0.30703</ProductVersion>
-		<TargetFramework>net471</TargetFramework>
+		<TargetFramework>net6.0-windows</TargetFramework>
 		<AssemblyTitle>NBT</AssemblyTitle>
 		<Company>AMolero Software</Company>
 		<Product>NBT</Product>
@@ -10,19 +10,6 @@
 		<FileVersion>1.7.0.0</FileVersion>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>portable</DebugType>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>none</DebugType>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="mscorlib" />
-		<Reference Include="System.Deployment" />
-		<Reference Include="System.Design" />
-		<Reference Include="System.Windows.Forms" />
-	</ItemGroup>
 </Project>
