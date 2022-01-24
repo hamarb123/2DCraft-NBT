@@ -11,7 +11,7 @@ namespace NBT.Tags
 {
 	public abstract class Tag : ICloneable, IEquatable<Tag>
 	{
-		public abstract object Value { get; set; }
+		public abstract object ValueProp { get; set; }
 
 		public abstract byte tagID { get; }
 
@@ -252,7 +252,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagByte))
 			{
-				return ((byte)value.Value);
+				return ((byte)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagByte");
 		}
@@ -260,7 +260,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagShort))
 			{
-				return ((short)value.Value);
+				return ((short)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagShort");
 		}
@@ -268,7 +268,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagInt))
 			{
-				return ((int)value.Value);
+				return ((int)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagInt");
 		}
@@ -276,7 +276,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagLong))
 			{
-				return ((long)value.Value);
+				return ((long)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagLong");
 		}
@@ -284,7 +284,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagFloat))
 			{
-				return ((float)value.Value);
+				return ((float)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagFloat");
 		}
@@ -292,7 +292,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagDouble))
 			{
-				return ((double)value.Value);
+				return ((double)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagDouble");
 		}
@@ -300,7 +300,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagByteArray))
 			{
-				return ((byte[])value.Value);
+				return ((byte[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagByteArray");
 		}
@@ -308,7 +308,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagString))
 			{
-				return ((string)value.Value);
+				return ((string)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagString");
 		}
@@ -316,7 +316,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagList))
 			{
-				return ((List<Tag>)value.Value);
+				return ((List<Tag>)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagList");
 		}
@@ -324,7 +324,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagCompound))
 			{
-				return ((Dictionary<string, Tag>)value.Value);
+				return ((Dictionary<string, Tag>)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagCompound");
 		}
@@ -332,7 +332,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagIntArray))
 			{
-				return ((int[])value.Value);
+				return ((int[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagIntArray");
 		}
@@ -340,7 +340,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagSByte)) 
 			{
-				return ((SByte)value.Value);
+				return ((SByte)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagSByte");
 		}
@@ -348,7 +348,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagUShort))
 			{
-				return ((ushort)value.Value);
+				return ((ushort)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagUShort");
 		}
@@ -356,7 +356,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagUInt))
 			{
-				return ((uint)value.Value);
+				return ((uint)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagUInt");
 		}
@@ -364,7 +364,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagULong))
 			{
-				return ((ulong)value.Value);
+				return ((ulong)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagULong");
 		}
@@ -372,7 +372,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagImage))
 			{
-				return ((Image)value.Value);
+				return ((Image)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagImage");
 		}
@@ -380,7 +380,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagIP))
 			{
-				return ((IPAddress)value.Value);
+				return ((IPAddress)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagIPv4");
 		}
@@ -388,7 +388,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagMAC))
 			{
-				return ((PhysicalAddress)value.Value);
+				return ((PhysicalAddress)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagMAC");
 		}
@@ -396,7 +396,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagShortArray))
 			{
-				return ((short[])value.Value);
+				return ((short[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagShortArray");
 		}
@@ -404,7 +404,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(DateTime))
 			{
-				return ((DateTime)value.Value);
+				return ((DateTime)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagDateTime");
 		}
@@ -412,7 +412,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TimeSpan))
 			{
-				return ((TimeSpan)value.Value);
+				return ((TimeSpan)value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagTimeSpan");
 		}
@@ -420,7 +420,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagLongArray))
 			{
-				return ((long[])value.Value);
+				return ((long[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagLongArray");
 		}
@@ -428,7 +428,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagFloatArray)) 
 			{
-				return ((float[])value.Value);
+				return ((float[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagFloatArray");
 		}
@@ -436,7 +436,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagDoubleArray))
 			{
-				return ((double[])value.Value);
+				return ((double[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagDoubleArray");
 		}
@@ -444,7 +444,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagSByteArray))
 			{
-				return ((sbyte[])value.Value);
+				return ((sbyte[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagSByteArray");
 		}
@@ -452,7 +452,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagUShortArray))
 			{
-				return ((ushort[])value.Value);
+				return ((ushort[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagUShortArray");
 		}
@@ -460,7 +460,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagUIntArray))
 			{
-				return ((uint[])value.Value);
+				return ((uint[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagUIntArray");
 		}
@@ -468,7 +468,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagULongArray))
 			{
-				return ((ulong[])value.Value);
+				return ((ulong[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagULongArray");
 		}
@@ -476,7 +476,7 @@ namespace NBT.Tags
 		{
 			if (value.getType() == typeof(TagImageArray))
 			{
-				return ((Image[])value.Value);
+				return ((Image[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagImageArray");
 		}

@@ -31,7 +31,7 @@ namespace NBT.Tags
 			this.readTag(stream);
 		}
 
-		public override object Value
+		public override object ValueProp
 		{
 			get
 			{

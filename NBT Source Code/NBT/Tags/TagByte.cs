@@ -95,7 +95,7 @@ namespace NBT.Tags
 			return typeof(TagByte);
 		}
 
-		public override object Value
+		public override object ValueProp
 		{
 			get
 			{

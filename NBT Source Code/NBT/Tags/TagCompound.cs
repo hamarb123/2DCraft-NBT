@@ -252,7 +252,7 @@ namespace NBT.Tags
 			return typeof(TagCompound);
 		}
 
-		public override object Value
+		public override object ValueProp
 		{
 			get
 			{

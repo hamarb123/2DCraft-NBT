@@ -196,7 +196,7 @@ namespace NBT.Tags
 			this.value.Reverse(index, count);
 		}
 
-		public override object Value
+		public override object ValueProp
 		{
 			get
 			{

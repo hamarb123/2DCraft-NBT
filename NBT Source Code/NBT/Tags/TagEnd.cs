@@ -49,7 +49,7 @@ namespace NBT.Tags
 			return typeof(TagEnd);
 		}
 
-		public override object Value
+		public override object ValueProp
 		{
 			get
 			{
