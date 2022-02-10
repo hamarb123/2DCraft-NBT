@@ -146,7 +146,7 @@ namespace NBT.IO.Compression.ZLIB
 
 				if (this.CanRead == true)
 				{
-					result = this.mDeflateStream.Read(buffer, offset, count);
+					result = this.mDeflateStream.ReadAll(buffer, offset, count);
 					//Comprobamos si hemos llegado al final del stream
 					if ((result < 1) && (count > 0))
 					{
@@ -292,7 +292,7 @@ namespace NBT.IO.Compression.ZLIB
 			{
 				this.mCRC = new byte[4];
 				this.mRawStream.Seek(-4, SeekOrigin.End);
-				if (this.mRawStream.Read(this.mCRC, 0, 4) < 4)
+				if (this.mRawStream.ReadAll(this.mCRC, 0, 4) < 4)
 				{
 					throw new EndOfStreamException();
 				}

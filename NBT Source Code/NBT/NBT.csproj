@@ -1,15 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<ProductVersion>8.0.30703</ProductVersion>
 		<TargetFramework>net6.0-windows</TargetFramework>
-		<AssemblyTitle>NBT</AssemblyTitle>
-		<Company>AMolero Software</Company>
+		<AssemblyTitle>NBT (for 2DCraft)</AssemblyTitle>
+		<Company>hamarb123</Company>
 		<Product>NBT</Product>
-		<Copyright>Copyright © 2015</Copyright>
-		<AssemblyVersion>1.7.0.0</AssemblyVersion>
-		<FileVersion>1.7.0.0</FileVersion>
+		<Copyright>Copyright © 2015 (AMolero Software), 2016-2022 (hamarb123)</Copyright>
+		<VersionPrefix>0.9</VersionPrefix>
+		<VersionSuffix>snapshot.3c</VersionSuffix>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>true</UseWindowsForms>
+		<ProjectGuid>9dd5be34-50d8-4907-91bb-acb14a8f1ae4</ProjectGuid>
 	</PropertyGroup>
+	<ItemGroup>
+		<Using Include="NBT.Extra" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Properties\" />
+	</ItemGroup>
 </Project>

@@ -89,7 +89,7 @@ namespace NBT.Tags
 				throw new NBT_InvalidArgumentNullException();
 			}
 			byte[] buffer = new byte[TagInt.ReadInt(stream)];
-			if (stream.Read(buffer, 0, buffer.Length) != buffer.Length)
+			if (stream.ReadAll(buffer, 0, buffer.Length) != buffer.Length)
 			{
 				throw new NBT_EndOfStreamException();
 			}
