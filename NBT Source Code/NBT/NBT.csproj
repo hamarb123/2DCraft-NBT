@@ -6,7 +6,7 @@
 		<Product>NBT</Product>
 		<Copyright>Copyright © 2015 (AMolero Software), 2016-2022 (hamarb123)</Copyright>
 		<VersionPrefix>0.9</VersionPrefix>
-		<VersionSuffix>snapshot.3c</VersionSuffix>
+		<VersionSuffix>snapshot.3e</VersionSuffix>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ProjectGuid>9dd5be34-50d8-4907-91bb-acb14a8f1ae4</ProjectGuid>
@@ -16,5 +16,10 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Properties\" />
+	</ItemGroup>
+	<ItemGroup>
+		<FrameworkReference
+			Update="Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms"
+			TargetingPackVersion="6.0.0" />
 	</ItemGroup>
 </Project>
