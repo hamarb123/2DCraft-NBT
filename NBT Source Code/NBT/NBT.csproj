@@ -1,25 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<AssemblyTitle>NBT (for 2DCraft)</AssemblyTitle>
 		<Company>hamarb123</Company>
 		<Product>NBT</Product>
 		<Copyright>Copyright © 2015 (AMolero Software), 2016-2022 (hamarb123)</Copyright>
 		<VersionPrefix>0.9</VersionPrefix>
-		<VersionSuffix>snapshot.3e</VersionSuffix>
+		<VersionSuffix>snapshot.3g</VersionSuffix>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
-		<UseWindowsForms>true</UseWindowsForms>
 		<ProjectGuid>9dd5be34-50d8-4907-91bb-acb14a8f1ae4</ProjectGuid>
+		<DefineConstants>$(DefineConstants),NO_GDI</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
 		<Using Include="NBT.Extra" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Properties\" />
+		<Folder Include="Properties\" />
 	</ItemGroup>
-	<ItemGroup>
-		<FrameworkReference
-			Update="Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms"
-			TargetingPackVersion="6.0.0" />
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<Compile Remove="**\*Image*.cs" />
 	</ItemGroup>
 </Project>

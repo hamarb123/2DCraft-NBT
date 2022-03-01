@@ -103,8 +103,10 @@ namespace NBT.Tags
 				case TagTypes.TagULong:
 					return new TagULong(stream);
 
+#if !NO_GDI
 				case TagTypes.TagImage:
 					return new TagImage(stream);
+#endif
 
 				case TagTypes.TagIP:
 					return new TagIP(stream);
@@ -142,8 +144,10 @@ namespace NBT.Tags
 				case TagTypes.TagULongArray:
 					return new TagULongArray(stream);
 
+#if !NO_GDI
 				case TagTypes.TagImageArray:
 					return new TagImageArray(stream);
+#endif
 
 			}
 			throw new NBT_InvalidTagTypeException();
@@ -201,8 +205,10 @@ namespace NBT.Tags
 				case TagTypes.TagULong:
 					return "TagULong";
 
+#if !NO_GDI
 				case TagTypes.TagImage:
 					return "TagImage";
+#endif
 
 				case TagTypes.TagIP:
 					return "TagIP";
@@ -240,8 +246,10 @@ namespace NBT.Tags
 				case TagTypes.TagULongArray:
 					return "TagULongArray";
 
+#if !NO_GDI
 				case TagTypes.TagImageArray:
 					return "TagImageArray";
+#endif
 
 			}
 			throw new NBT_InvalidTagTypeException("Unknown TagId '" + id + "'.");
@@ -368,6 +376,7 @@ namespace NBT.Tags
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagULong");
 		}
+#if !NO_GDI
 		public static explicit operator Image(Tag value)
 		{
 			if (value.getType() == typeof(TagImage))
@@ -376,6 +385,7 @@ namespace NBT.Tags
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagImage");
 		}
+#endif
 		public static explicit operator IPAddress(Tag value)
 		{
 			if (value.getType() == typeof(TagIP))
@@ -472,6 +482,7 @@ namespace NBT.Tags
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagULongArray");
 		}
+#if !NO_GDI
 		public static explicit operator Image[](Tag value)
 		{
 			if (value.getType() == typeof(TagImageArray))
@@ -480,5 +491,6 @@ namespace NBT.Tags
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagImageArray");
 		}
+#endif
 	}
 }

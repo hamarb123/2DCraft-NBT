@@ -20,7 +20,9 @@ namespace NBT.Tags
 			public const byte TagIntArray = 11;
 
 			//Etiquetas exclusivas no estándar del formato NBT
+#if !NO_GDI
 			public const byte TagImageArray = 237;
+#endif
 			public const byte TagULongArray = 238;
 			public const byte TagUIntArray = 239;
 			public const byte TagUShortArray = 240;
@@ -35,7 +37,9 @@ namespace NBT.Tags
 			public const byte TagUInt = 249;
 			public const byte TagUShort = 250;
 			public const byte TagSByte = 251;
+#if !NO_GDI
 			public const byte TagImage = 252;
+#endif
 			public const byte TagIP = 253;
 			public const byte TagMAC = 254;
 		#endregion
