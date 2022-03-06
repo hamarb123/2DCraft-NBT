@@ -190,10 +190,6 @@ namespace NBT.Tags
 		
 		public bool Remove(string key)
 		{
-			if (this.Contains(key) == false) 
-			{
-				throw new NBT_InvalidArgumentException();
-			}
 			return this.value.Remove(key);
 		}
 

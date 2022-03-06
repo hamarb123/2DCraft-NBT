@@ -6,7 +6,7 @@
 		<Product>NBT</Product>
 		<Copyright>Copyright © 2015 (AMolero Software), 2016-2022 (hamarb123)</Copyright>
 		<VersionPrefix>0.9</VersionPrefix>
-		<VersionSuffix>snapshot.3g</VersionSuffix>
+		<VersionSuffix>snapshot.3h</VersionSuffix>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<ProjectGuid>9dd5be34-50d8-4907-91bb-acb14a8f1ae4</ProjectGuid>
 		<DefineConstants>$(DefineConstants),NO_GDI</DefineConstants>
