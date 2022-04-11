@@ -9,7 +9,7 @@ namespace NBT.Tags
 		public TimeSpan value;
 
 		public TagTimeSpan() : this(new TimeSpan(DateTime.Now.Ticks))
-		{ 
+		{
 		}
 
 		public TagTimeSpan(TimeSpan value)
@@ -48,7 +48,7 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
 				return TagTypes.TagTimeSpan;
 			}
@@ -92,7 +92,7 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			TagLong.WriteLong(stream, value.Ticks); 
+			TagLong.WriteLong(stream, value.Ticks);
 		}
 
 		public override object Clone()

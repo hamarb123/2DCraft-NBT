@@ -48,9 +48,9 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
-				return TagTypes.TagULong; 
+				return TagTypes.TagULong;
 			}
 		}
 
@@ -83,16 +83,16 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			byte[] buffer = new byte[8];
-			if (stream.ReadAll(buffer, 0, buffer.Length) != buffer.Length)
+			Span<byte> buffer = stackalloc byte[8];
+			if (stream.ReadAll(buffer) != buffer.Length)
 			{
 				throw new NBT_EndOfStreamException();
 			}
-			if (BitConverter.IsLittleEndian == true)
+			if (BitConverter.IsLittleEndian)
 			{
-				Array.Reverse(buffer);
+				buffer.ReverseOrder();
 			}
-			return BitConverter.ToUInt64(buffer, 0);
+			return BitConverter.ToUInt64(buffer);
 		}
 
 		internal static void WriteULong(Stream stream, ulong value)
@@ -101,12 +101,16 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			byte[] bytes = BitConverter.GetBytes(value);
+			Span<byte> bytes = stackalloc byte[8];
+			if (!BitConverter.TryWriteBytes(bytes, value))
+			{
+				throw new Exception("Failed to write bytes.");
+			}
 			if (BitConverter.IsLittleEndian == true)
 			{
-				Array.Reverse(bytes);
+				bytes.ReverseOrder();
 			}
-			stream.Write(bytes, 0, bytes.Length);
+			stream.Write(bytes);
 		}
 
 		public override object Clone()

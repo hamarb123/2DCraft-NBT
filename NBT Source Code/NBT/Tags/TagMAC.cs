@@ -89,13 +89,13 @@ namespace NBT.Tags
 			{
 				throw new NBT_EndOfStreamException();
 			}
-			if (BitConverter.IsLittleEndian == true) 
+			if (BitConverter.IsLittleEndian == true)
 			{
-				Array.Reverse(buffer);			
+				Array.Reverse(buffer);
 			}
 			return new PhysicalAddress(buffer);
 		}
-		
+
 		internal static void WriteMAC(Stream stream, PhysicalAddress value)
 		{
 			if (stream == null)
@@ -108,12 +108,12 @@ namespace NBT.Tags
 				bytes = new byte[] { 0, 0, 0, 0, 0, 0 };
 			}
 			else
-			{ 
-				bytes = value.GetAddressBytes();			
+			{
+				bytes = value.GetAddressBytes();
 			}
 			if (BitConverter.IsLittleEndian == true)
-			{ 
-				Array.Reverse(bytes);			
+			{
+				Array.Reverse(bytes);
 			}
 			stream.Write(bytes, 0, bytes.Length);
 		}

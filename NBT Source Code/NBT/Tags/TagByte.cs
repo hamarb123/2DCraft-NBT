@@ -30,7 +30,7 @@ namespace NBT.Tags
 		{
 			get
 			{
-				return TagTypes.TagByte;			
+				return TagTypes.TagByte;
 			}
 		}
 

@@ -16,18 +16,18 @@ namespace NBT.IO.Compression.ZLIB
 			private int pend = 0;
 		#endregion
 		#region "Metodos publicos"
-			public void Update(byte data) 
+			public void Update(byte data)
 			{
 				if (pend >= _nmax) updateModulus();
 				a += data;
 				b += a;
 				pend++;
 			}
-			public void Update(byte[] data) 
+			public void Update(byte[] data)
 			{
 				Update(data, 0, data.Length);
 			}
-			public void Update(byte[] data, int offset, int length) 
+			public void Update(byte[] data, int offset, int length)
 			{
 				int nextJToComputeModulus = _nmax - pend;
 				for (int j = 0; j < length; j++) {
@@ -42,7 +42,7 @@ namespace NBT.IO.Compression.ZLIB
 					pend++;
 				}
 			}
-			public void Reset() 
+			public void Reset()
 			{
 				a = 1;
 				b = 0;

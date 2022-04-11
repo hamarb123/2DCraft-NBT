@@ -54,7 +54,7 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
 				return TagTypes.TagSByteArray;
 			}
@@ -83,14 +83,14 @@ namespace NBT.Tags
 			TagSByteArray.WriteSByteArray(stream, this.value);
 		}
 
-		internal static sbyte[] ReadSByteArray(Stream stream) 
+		internal static sbyte[] ReadSByteArray(Stream stream)
 		{
 			if (stream == null)
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
 			sbyte[] buffer = new sbyte[TagInt.ReadInt(stream)];
-			for (int i = 0; i < buffer.Length; i++) 
+			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i] = TagSByte.ReadSByte(stream);
 			}
@@ -108,12 +108,12 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
 				for (int i = 0; i < value.Length; i++)
 				{
 					TagSByte.WriteSByte(stream, value[i]);
-				}			
+				}
 			}
 		}
 

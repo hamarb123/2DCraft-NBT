@@ -7,8 +7,8 @@ namespace NBT.Exceptions
 		public NBT_EndOfStreamException() : base("")
 		{
 		}
-		public NBT_EndOfStreamException(string message) : base(message) 
-		{ 
+		public NBT_EndOfStreamException(string message) : base(message)
+		{
 		}
 		public NBT_EndOfStreamException(string message, Exception innerException) : base(message, innerException)
 		{

@@ -6,8 +6,8 @@ namespace NBT.Exceptions
 		public NBT_Exception() : base("")
 		{
 		}
-		public NBT_Exception(string message) : base(message) 
-		{ 
+		public NBT_Exception(string message) : base(message)
+		{
 		}
 		public NBT_Exception(string message, Exception innerException) : base(message, innerException)
 		{

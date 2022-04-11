@@ -7,8 +7,8 @@ namespace NBT.Exceptions
 		public NBT_InvalidArgumentException() : base("")
 		{
 		}
-		public NBT_InvalidArgumentException(string message) : base(message) 
-		{ 
+		public NBT_InvalidArgumentException(string message) : base(message)
+		{
 		}
 		public NBT_InvalidArgumentException(string message, Exception innerException) : base(message, innerException)
 		{

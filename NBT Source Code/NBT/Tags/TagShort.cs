@@ -83,16 +83,16 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			byte[] buffer = new byte[2];
-			if (stream.ReadAll(buffer, 0, buffer.Length) != buffer.Length)
+			Span<byte> buffer = stackalloc byte[2];
+			if (stream.ReadAll(buffer) != buffer.Length)
 			{
 				throw new NBT_EndOfStreamException();
 			}
-			if (BitConverter.IsLittleEndian == true)
-			{ 
-				Array.Reverse(buffer);			
+			if (BitConverter.IsLittleEndian)
+			{
+				buffer.ReverseOrder();
 			}
-			return BitConverter.ToInt16(buffer, 0);
+			return BitConverter.ToInt16(buffer);
 		}
 
 		internal static void WriteShort(Stream stream, short value)
@@ -101,12 +101,16 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			byte[] bytes = BitConverter.GetBytes(value);
+			Span<byte> bytes = stackalloc byte[2];
+			if (!BitConverter.TryWriteBytes(bytes, value))
+			{
+				throw new Exception("Failed to write bytes.");
+			}
 			if (BitConverter.IsLittleEndian == true)
 			{
-				Array.Reverse(bytes);
+				bytes.ReverseOrder();
 			}
-			stream.Write(bytes, 0, bytes.Length);
+			stream.Write(bytes);
 		}
 
 		public override object Clone()

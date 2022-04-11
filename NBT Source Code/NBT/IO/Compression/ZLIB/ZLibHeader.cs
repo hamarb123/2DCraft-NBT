@@ -1,5 +1,5 @@
 ﻿/*
- * Alberto Molero 
+ * Alberto Molero
  * Spain (Catalonia)
  * Last Revision: 16/10/2014
  */
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace NBT.IO.Compression.ZLIB
 {
 	public enum FLevel
-	{ 
+	{
 		Faster = 0,
 		Fast = 1,
 		Default = 2,
@@ -50,8 +50,8 @@ namespace NBT.IO.Compression.ZLIB
 				}
 				set
 				{
-					if (value > 15) 
-					{ 
+					if (value > 15)
+					{
 						throw new ArgumentOutOfRangeException("Argument cannot be greater than 15");
 					}
 					this.mCompressionMethod = value;
@@ -72,7 +72,7 @@ namespace NBT.IO.Compression.ZLIB
 					this.mCompressionInfo = value;
 				}
 			}
-			public byte FCheck 
+			public byte FCheck
 			{
 				get
 				{
@@ -87,7 +87,7 @@ namespace NBT.IO.Compression.ZLIB
 					this.mFCheck = value;
 				}
 			}
-			public bool FDict 
+			public bool FDict
 			{
 				get
 				{
@@ -98,7 +98,7 @@ namespace NBT.IO.Compression.ZLIB
 					this.mFDict = value;
 				}
 			}
-			public FLevel FLevel 
+			public FLevel FLevel
 			{
 				get
 				{
@@ -111,7 +111,7 @@ namespace NBT.IO.Compression.ZLIB
 			}
 		#endregion
 		#region "Constructor"
-			public ZLibHeader() 
+			public ZLibHeader()
 			{
 
 			}
@@ -135,7 +135,7 @@ namespace NBT.IO.Compression.ZLIB
 			}
 		#endregion
 		#region "Metodos publicos"
-			public byte[] EncodeZlibHeader() 
+			public byte[] EncodeZlibHeader()
 			{
 				byte[] result = new byte[2];
 

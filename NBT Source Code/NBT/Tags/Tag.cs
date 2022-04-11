@@ -346,7 +346,7 @@ namespace NBT.Tags
 		}
 		public static explicit operator SByte(Tag value)
 		{
-			if (value.getType() == typeof(TagSByte)) 
+			if (value.getType() == typeof(TagSByte))
 			{
 				return ((SByte)value.ValueProp);
 			}
@@ -436,13 +436,13 @@ namespace NBT.Tags
 		}
 		public static explicit operator float[](Tag value)
 		{
-			if (value.getType() == typeof(TagFloatArray)) 
+			if (value.getType() == typeof(TagFloatArray))
 			{
 				return ((float[])value.ValueProp);
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagFloatArray");
 		}
-		public static explicit operator double[](Tag value) 
+		public static explicit operator double[](Tag value)
 		{
 			if (value.getType() == typeof(TagDoubleArray))
 			{
@@ -466,7 +466,7 @@ namespace NBT.Tags
 			}
 			throw new NBT_InvalidArgumentException("The parameter must be a TagUShortArray");
 		}
-		public static explicit operator uint[](Tag value) 
+		public static explicit operator uint[](Tag value)
 		{
 			if (value.getType() == typeof(TagUIntArray))
 			{

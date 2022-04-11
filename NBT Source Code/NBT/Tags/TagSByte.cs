@@ -48,9 +48,9 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
-				return TagTypes.TagSByte; 
+				return TagTypes.TagSByte;
 			}
 		}
 

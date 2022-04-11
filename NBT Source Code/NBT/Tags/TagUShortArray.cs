@@ -10,7 +10,7 @@ namespace NBT.Tags
 		public ushort[] value;
 
 		public TagUShortArray() : this(new ushort[0])
-		{ 
+		{
 		}
 
 		public TagUShortArray(ushort[] value)
@@ -53,7 +53,7 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
 				return TagTypes.TagUShortArray;
 			}
@@ -123,7 +123,7 @@ namespace NBT.Tags
 
 		public static explicit operator TagUShortArray(ushort[] value)
 		{
-			return new TagUShortArray(value);		
+			return new TagUShortArray(value);
 		}
 
 		public override Type getType()

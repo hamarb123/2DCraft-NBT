@@ -9,7 +9,7 @@ namespace NBT.Tags
 		public DateTime value;
 
 		public TagDateTime() : this(new DateTime(DateTime.Now.Ticks))
-		{ 
+		{
 		}
 
 		public TagDateTime(DateTime value)
@@ -48,7 +48,7 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
 				return TagTypes.TagDateTime;
 			}
@@ -100,9 +100,9 @@ namespace NBT.Tags
 			return new TagDateTime(this.value);
 		}
 
-		public static explicit operator TagDateTime(DateTime value) 
+		public static explicit operator TagDateTime(DateTime value)
 		{
-			return new TagDateTime(value); 
+			return new TagDateTime(value);
 		}
 
 		public override Type getType()

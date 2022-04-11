@@ -15,13 +15,13 @@ namespace NBT.Tags
 
 		public TagByteArray(byte[] value)
 		{
-			if (value == null) 
+			if (value == null)
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
 			this.value = value;
 		}
-		
+
 		internal TagByteArray(Stream stream) : this(new byte[0])
 		{
 			if (stream == null)
@@ -55,7 +55,7 @@ namespace NBT.Tags
 		{
 			get
 			{
-				return TagTypes.TagByteArray;			
+				return TagTypes.TagByteArray;
 			}
 		}
 
@@ -107,9 +107,9 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
-				stream.Write(value, 0, value.Length);			
+				stream.Write(value, 0, value.Length);
 			}
 		}
 

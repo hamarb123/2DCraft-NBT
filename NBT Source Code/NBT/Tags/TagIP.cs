@@ -98,8 +98,8 @@ namespace NBT.Tags
 				TagByteArray.WriteByteArray(stream, new byte[] { 127, 0, 0, 1 });
 			}
 			else
-			{ 
-				TagByteArray.WriteByteArray(stream, value.GetAddressBytes());			
+			{
+				TagByteArray.WriteByteArray(stream, value.GetAddressBytes());
 			}
 		}
 

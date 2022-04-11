@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Buffers;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using NBT.Exceptions;
 
@@ -65,12 +67,36 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			byte[] buffer = new byte[TagUShort.ReadUShort(stream)];
-			if (stream.ReadAll(buffer, 0, buffer.Length) != buffer.Length)
+			var size = TagUShort.ReadUShort(stream);
+			if (size == 0)
 			{
-				throw new NBT_EndOfStreamException();
+				return string.Empty;
 			}
-			return Encoding.UTF8.GetString(buffer);
+			else if (size < 1024)
+			{
+				Span<byte> allocation = stackalloc byte[size];
+				if (stream.ReadAll(allocation) != size)
+				{
+					throw new NBT_EndOfStreamException();
+				}
+				return Encoding.UTF8.GetString(allocation);
+			}
+			else
+			{
+				byte[] arr = ArrayPool<byte>.Shared.Rent(size);
+				try
+				{
+					if (stream.ReadAll(arr, 0, size) != size)
+					{
+						throw new NBT_EndOfStreamException();
+					}
+					return Encoding.UTF8.GetString(arr, 0, size);
+				}
+				finally
+				{
+					ArrayPool<byte>.Shared.Return(arr);
+				}
+			}
 		}
 
 		internal static void WriteString(Stream stream, string value)
@@ -79,13 +105,38 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			if (Encoding.UTF8.GetByteCount(value) > ushort.MaxValue)
+			if (value == string.Empty) //special case
+			{
+				TagUShort.WriteUShort(stream, 0);
+				return;
+			}
+			int size = -1;
+			var maxSize = Encoding.UTF8.GetMaxByteCount(value.Length);
+			if (maxSize > ushort.MaxValue && (size = Encoding.UTF8.GetByteCount(value)) > ushort.MaxValue)
 			{
 				throw new NBT_InvalidArgumentException("String is too long");
 			}
-			byte[] bytes = Encoding.UTF8.GetBytes(value);
-			TagUShort.WriteUShort(stream, (ushort)bytes.Length);
-			stream.Write(bytes, 0, bytes.Length);
+			if (maxSize <= 1024 || (size = Encoding.UTF8.GetByteCount(value)) <= 1024)
+			{
+				Span<byte> allocation = stackalloc byte[size == -1 ? maxSize : size];
+				size = Encoding.UTF8.GetBytes(value, allocation);
+				TagUShort.WriteUShort(stream, (ushort)size);
+				stream.Write(allocation[..size]);
+			}
+			else
+			{
+				byte[] arr = ArrayPool<byte>.Shared.Rent(size == -1 ? maxSize : size);
+				try
+				{
+					size = Encoding.UTF8.GetBytes(value, arr);
+					TagUShort.WriteUShort(stream, (ushort)size);
+					stream.Write(arr, 0, (ushort)size);
+				}
+				finally
+				{
+					ArrayPool<byte>.Shared.Return(arr);
+				}
+			}
 		}
 
 		public override object Clone()

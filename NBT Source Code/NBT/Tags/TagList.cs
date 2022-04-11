@@ -117,7 +117,7 @@ namespace NBT.Tags
 
 		public int Count
 		{
-			get 
+			get
 			{
 				return this.value.Count;
 			}
@@ -125,7 +125,7 @@ namespace NBT.Tags
 
 		public bool IsReadOnly
 		{
-			get 
+			get
 			{
 				return false;
 			}

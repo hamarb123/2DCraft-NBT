@@ -11,7 +11,7 @@ namespace NBT.Tags
 		public Image[] value;
 
 		public TagImageArray() : this(new Image[0])
-		{ 
+		{
 		}
 
 		public TagImageArray(Image[] value)
@@ -54,7 +54,7 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
 				return TagTypes.TagImageArray;
 			}
@@ -90,14 +90,14 @@ namespace NBT.Tags
 				throw new NBT_InvalidArgumentNullException();
 			}
 			Image[] buffer = new Image[TagInt.ReadInt(stream)];
-			for (int i = 0; i < buffer.Length; i++) 
+			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i] = TagImage.ReadImage(stream);
 			}
 			return buffer;
 		}
 
-		internal static void WriteImageArray(Stream stream, Image[] value) 
+		internal static void WriteImageArray(Stream stream, Image[] value)
 		{
 			if (stream == null)
 			{
@@ -108,12 +108,12 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
-				for (int i = 0; i < value.Length; i++) 
+				for (int i = 0; i < value.Length; i++)
 				{
 					TagImage.WriteImage(stream, value[i]);
-				}			
+				}
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace NBT.Tags
 			return new TagImageArray(this.value);
 		}
 
-		public static explicit operator TagImageArray(Image[] value) 
+		public static explicit operator TagImageArray(Image[] value)
 		{
 			return new TagImageArray(value);
 		}

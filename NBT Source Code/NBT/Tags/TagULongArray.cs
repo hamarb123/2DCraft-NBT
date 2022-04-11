@@ -21,7 +21,7 @@ namespace NBT.Tags
 			}
 			this.value = value;
 		}
-		
+
 		internal TagULongArray(Stream stream) : this(new ulong[0])
 		{
 			if (stream == null)
@@ -54,7 +54,7 @@ namespace NBT.Tags
 		{
 			get
 			{
-				return TagTypes.TagULongArray;			
+				return TagTypes.TagULongArray;
 			}
 		}
 

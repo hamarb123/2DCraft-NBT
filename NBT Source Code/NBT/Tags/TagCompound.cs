@@ -90,7 +90,7 @@ namespace NBT.Tags
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
-			foreach (KeyValuePair<string, Tag> keyValue in this.value) 
+			foreach (KeyValuePair<string, Tag> keyValue in this.value)
 			{
 				//Escribimos el identificador de la etiqueta
 				stream.WriteByte(keyValue.Value.tagID);
@@ -120,7 +120,7 @@ namespace NBT.Tags
 		{
 			TagCompound result = new TagCompound();
 
-			foreach (KeyValuePair<string, Tag> value in this.value) 
+			foreach (KeyValuePair<string, Tag> value in this.value)
 			{
 				result.Add(value.Key, (Tag)value.Value.Clone());
 			}
@@ -187,7 +187,7 @@ namespace NBT.Tags
 		{
 			return this.value.ContainsKey(key);
 		}
-		
+
 		public bool Remove(string key)
 		{
 			return this.value.Remove(key);
@@ -277,7 +277,7 @@ namespace NBT.Tags
 			{
 				if (this.value.Keys.Count == other.value.Keys.Count)
 				{
-					foreach (KeyValuePair<string, Tag> kvp in this.value) 
+					foreach (KeyValuePair<string, Tag> kvp in this.value)
 					{
 						Tag tmpValue;
 						if (other.value.TryGetValue(kvp.Key, out tmpValue) == false)

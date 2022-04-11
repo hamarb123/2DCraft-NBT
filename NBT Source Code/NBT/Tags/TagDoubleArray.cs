@@ -9,11 +9,11 @@ namespace NBT.Tags
 	{
 		public double[] value;
 
-		public TagDoubleArray() : this(new double[0]) 
+		public TagDoubleArray() : this(new double[0])
 		{
 		}
 
-		public TagDoubleArray(double[] value) 
+		public TagDoubleArray(double[] value)
 		{
 			if (value == null)
 			{
@@ -24,7 +24,7 @@ namespace NBT.Tags
 
 		internal TagDoubleArray(Stream stream) : this(new double[0])
 		{
-			if (stream == null) 
+			if (stream == null)
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
@@ -53,9 +53,9 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
-				return TagTypes.TagDoubleArray; 
+				return TagTypes.TagDoubleArray;
 			}
 		}
 
@@ -96,7 +96,7 @@ namespace NBT.Tags
 			return buffer;
 		}
 
-		internal static void WriteDoubleArray(Stream stream, double[] value) 
+		internal static void WriteDoubleArray(Stream stream, double[] value)
 		{
 			if (stream == null)
 			{
@@ -107,12 +107,12 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
-				for (int i = 0; i < value.Length; i++) 
+				for (int i = 0; i < value.Length; i++)
 				{
 					TagDouble.WriteDouble(stream, value[i]);
-				}			
+				}
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace NBT.Tags
 			return new TagDoubleArray(this.value);
 		}
 
-		public static explicit operator TagDoubleArray(double[] value) 
+		public static explicit operator TagDoubleArray(double[] value)
 		{
 			return new TagDoubleArray(value);
 		}

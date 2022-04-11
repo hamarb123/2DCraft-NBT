@@ -1,5 +1,5 @@
 ﻿/*
- * Alberto Molero 
+ * Alberto Molero
  * Spain (Catalonia)
  * Last Revision: 16/10/2014
  */
@@ -41,7 +41,7 @@ namespace NBT.IO.Compression.ZLIB
 			/// <param name="stream">Secuencia que se va a comprimir o descomprimir</param>
 			/// <param name="compressionMode">Modo de compresión</param>
 			public ZLIBStream(Stream stream, CompressionMode compressionMode) : this(stream, compressionMode, false)
-			{ 
+			{
 			}
 			/// <summary>
 			/// Inicializa una nueva instancia de la clase ZLIBStream usando la secuencia y nivel de compresión especificados y, opcionalmente, deja la secuencia abierta.
@@ -82,23 +82,23 @@ namespace NBT.IO.Compression.ZLIB
 			}
 			public override bool CanWrite
 			{
-				get 
+				get
 				{
 					return ((this.mCompressionMode == CompressionMode.Compress) && (this.mClosed != true));
 				}
 			}
 			public override bool CanSeek
 			{
-				get 
+				get
 				{
 					return false;
 				}
 			}
 			public override long Length
 			{
-				get 
-				{ 
-					throw new NotImplementedException(); 
+				get
+				{
+					throw new NotImplementedException();
 				}
 			}
 			public override long Position
@@ -153,8 +153,8 @@ namespace NBT.IO.Compression.ZLIB
 						this.ReadCRC();
 					}
 					else
-					{ 
-						this.adler32.Update(buffer, offset, result);					 
+					{
+						this.adler32.Update(buffer, offset, result);
 					}
 				}
 				else
@@ -278,7 +278,7 @@ namespace NBT.IO.Compression.ZLIB
 						bResult = header.IsSupportedZLibStream;
 					}
 					catch
-					{ 
+					{
 						//Nada
 					}
 				}
@@ -316,7 +316,7 @@ namespace NBT.IO.Compression.ZLIB
 			/// Inicializa el stream
 			/// </summary>
 			private void InicializarStream()
-			{ 
+			{
 				switch (this.mCompressionMode)
 				{
 					case CompressionMode.Compress:

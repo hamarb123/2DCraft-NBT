@@ -21,7 +21,7 @@ namespace NBT.Tags
 			}
 			this.value = value;
 		}
-		
+
 		internal TagIntArray(Stream stream) : this(new int[0])
 		{
 			if (stream == null)
@@ -54,7 +54,7 @@ namespace NBT.Tags
 		{
 			get
 			{
-				return TagTypes.TagIntArray;			
+				return TagTypes.TagIntArray;
 			}
 		}
 
@@ -106,12 +106,12 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
 				for (int i = 0; i < value.Length; i++)
 				{
 					TagInt.WriteInt(stream, value[i]);
-				}			
+				}
 			}
 		}
 

@@ -8,8 +8,8 @@ namespace NBT.Tags
 	{
 
 		public TagEnd()
-		{ 
-		
+		{
+
 		}
 
 		public override byte tagID

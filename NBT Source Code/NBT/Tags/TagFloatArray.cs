@@ -10,7 +10,7 @@ namespace NBT.Tags
 		public float[] value;
 
 		public TagFloatArray() : this(new float[0])
-		{ 
+		{
 		}
 
 		public TagFloatArray(float[] value)
@@ -53,7 +53,7 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
 				return TagTypes.TagFloatArray;
 			}
@@ -89,14 +89,14 @@ namespace NBT.Tags
 				throw new NBT_InvalidArgumentNullException();
 			}
 			float[] buffer = new float[TagInt.ReadInt(stream)];
-			for (int i = 0; i < buffer.Length; i++) 
+			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i] = TagFloat.ReadFloat(stream);
 			}
 			return buffer;
 		}
 
-		internal static void WriteFloatArray(Stream stream, float[] value) 
+		internal static void WriteFloatArray(Stream stream, float[] value)
 		{
 			if (stream == null)
 			{
@@ -107,12 +107,12 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
-				for (int i = 0; i < value.Length; i++) 
+				for (int i = 0; i < value.Length; i++)
 				{
 					TagFloat.WriteFloat(stream, value[i]);
-				}			
+				}
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace NBT.Tags
 			return new TagFloatArray(this.value);
 		}
 
-		public static explicit operator TagFloatArray(float[] value) 
+		public static explicit operator TagFloatArray(float[] value)
 		{
 			return new TagFloatArray(value);
 		}

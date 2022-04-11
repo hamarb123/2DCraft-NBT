@@ -9,11 +9,11 @@ namespace NBT.Tags
 	{
 		public long[] value;
 
-		public TagLongArray() : this(new long[0]) 
-		{ 
+		public TagLongArray() : this(new long[0])
+		{
 		}
 
-		public TagLongArray(long[] value) 
+		public TagLongArray(long[] value)
 		{
 			if (value == null)
 			{
@@ -24,7 +24,7 @@ namespace NBT.Tags
 
 		internal TagLongArray(Stream stream) : this(new long[0])
 		{
-			if (stream == null) 
+			if (stream == null)
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
@@ -43,7 +43,7 @@ namespace NBT.Tags
 				{
 					throw new NBT_InvalidArgumentNullException();
 				}
-				if (value.GetType() != typeof(long[])) 
+				if (value.GetType() != typeof(long[]))
 				{
 					throw new NBT_InvalidArgumentException();
 				}
@@ -53,9 +53,9 @@ namespace NBT.Tags
 
 		public override byte tagID
 		{
-			get 
+			get
 			{
-				return TagTypes.TagLongArray; 
+				return TagTypes.TagLongArray;
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace NBT.Tags
 
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null) 
+			if (stream == null)
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
@@ -82,21 +82,21 @@ namespace NBT.Tags
 			TagLongArray.WriteLongArray(stream, this.value);
 		}
 
-		internal static long[] ReadLongArray(Stream stream) 
+		internal static long[] ReadLongArray(Stream stream)
 		{
 			if (stream == null)
 			{
 				throw new NBT_InvalidArgumentNullException();
 			}
 			long[] buffer = new long[TagInt.ReadInt(stream)];
-			for (int i = 0; i < buffer.Length; i++) 
+			for (int i = 0; i < buffer.Length; i++)
 			{
 				buffer[i] = TagLong.ReadLong(stream);
 			}
 			return buffer;
 		}
 
-		internal static void WriteLongArray(Stream stream, long[] value) 
+		internal static void WriteLongArray(Stream stream, long[] value)
 		{
 			if (stream == null)
 			{
@@ -107,12 +107,12 @@ namespace NBT.Tags
 				TagInt.WriteInt(stream, 0);
 			}
 			else
-			{ 
+			{
 				TagInt.WriteInt(stream, value.Length);
-				for (int i = 0; i < value.Length; i++) 
+				for (int i = 0; i < value.Length; i++)
 				{
 					TagLong.WriteLong(stream, value[i]);
-				}			
+				}
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace NBT.Tags
 			return new TagLongArray(this.value);
 		}
 
-		public static explicit operator TagLongArray(long[] value) 
+		public static explicit operator TagLongArray(long[] value)
 		{
 			return new TagLongArray(value);
 		}

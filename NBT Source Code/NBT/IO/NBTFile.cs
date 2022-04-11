@@ -35,7 +35,7 @@ namespace NBT.IO
 			}
 			public TagCompound RootTag
 			{
-				get 
+				get
 				{
 					return this.rootTagValue;
 				}

@@ -20,7 +20,7 @@ namespace NBT.IO.Compression
 			}
 			return result;
 		}
-		
+
 		internal static NBTCompressionType CompressionType(Stream stream)
 		{
 			NBTCompressionType result = NBTCompressionType.Uncompressed;
