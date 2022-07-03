@@ -15,17 +15,23 @@ namespace NBT.Tags
 
 		public abstract byte tagID { get; }
 
-		public abstract string toString();
-
 		internal abstract void readTag(Stream stream);
 
 		internal abstract void writeTag(Stream stream);
 
 		public abstract object Clone();
 
-		public abstract Type getType();
-
 		public abstract bool Equals(Tag other);
+		public override bool Equals(object obj)
+		{
+			return obj is Tag other2 && Equals(other2);
+		}
+		public override int GetHashCode()
+		{
+			return 0;
+		}
+
+		public virtual string ToString(IFormatProvider provider) => ToString();
 
 		public virtual Tag this[string key]
 		{
@@ -150,7 +156,8 @@ namespace NBT.Tags
 #endif
 
 			}
-			throw new NBT_InvalidTagTypeException();
+			NBT_InvalidTagTypeException.Throw();
+			return default;
 		}
 
 		public static string GetNamedTypeFromId(byte id)
@@ -252,244 +259,274 @@ namespace NBT.Tags
 #endif
 
 			}
-			throw new NBT_InvalidTagTypeException("Unknown TagId '" + id + "'.");
+			NBT_InvalidTagTypeException.Throw("Unknown TagId '" + id + "'.");
+			return default;
 		}
 
 		//Operadores de conversiones
 		public static explicit operator byte(Tag value)
 		{
-			if (value.getType() == typeof(TagByte))
+			if (value is TagByte tag2)
 			{
-				return ((byte)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagByte");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagByte");
+			return default;
 		}
 		public static explicit operator short(Tag value)
 		{
-			if (value.getType() == typeof(TagShort))
+			if (value is TagShort tag2)
 			{
-				return ((short)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagShort");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagShort");
+			return default;
 		}
 		public static explicit operator int(Tag value)
 		{
-			if (value.getType() == typeof(TagInt))
+			if (value is TagInt tag2)
 			{
-				return ((int)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagInt");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagInt");
+			return default;
 		}
 		public static explicit operator long(Tag value)
 		{
-			if (value.getType() == typeof(TagLong))
+			if (value is TagLong tag2)
 			{
-				return ((long)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagLong");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagLong");
+			return default;
 		}
 		public static explicit operator float(Tag value)
 		{
-			if (value.getType() == typeof(TagFloat))
+			if (value is TagFloat tag2)
 			{
-				return ((float)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagFloat");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagFloat");
+			return default;
 		}
 		public static explicit operator double(Tag value)
 		{
-			if (value.getType() == typeof(TagDouble))
+			if (value is TagDouble tag2)
 			{
-				return ((double)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagDouble");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagDouble");
+			return default;
 		}
 		public static explicit operator byte[](Tag value)
 		{
-			if (value.getType() == typeof(TagByteArray))
+			if (value is TagByteArray tag2)
 			{
-				return ((byte[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagByteArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagByteArray");
+			return default;
 		}
 		public static explicit operator string(Tag value)
 		{
-			if (value.getType() == typeof(TagString))
+			if (value is TagString tag2)
 			{
-				return ((string)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagString");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagString");
+			return default;
 		}
 		public static explicit operator List<Tag>(Tag value)
 		{
-			if (value.getType() == typeof(TagList))
+			if (value is TagList tag2)
 			{
-				return ((List<Tag>)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagList");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagList");
+			return default;
 		}
 		public static explicit operator Dictionary<string, Tag>(Tag value)
 		{
-			if (value.getType() == typeof(TagCompound))
+			if (value is TagCompound tag2)
 			{
-				return ((Dictionary<string, Tag>)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagCompound");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagCompound");
+			return default;
 		}
 		public static explicit operator int[](Tag value)
 		{
-			if (value.getType() == typeof(TagIntArray))
+			if (value is TagIntArray tag2)
 			{
-				return ((int[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagIntArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagIntArray");
+			return default;
 		}
-		public static explicit operator SByte(Tag value)
+		public static explicit operator sbyte(Tag value)
 		{
-			if (value.getType() == typeof(TagSByte))
+			if (value is TagSByte tag2)
 			{
-				return ((SByte)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagSByte");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagSByte");
+			return default;
 		}
 		public static explicit operator ushort(Tag value)
 		{
-			if (value.getType() == typeof(TagUShort))
+			if (value is TagUShort tag2)
 			{
-				return ((ushort)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagUShort");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagUShort");
+			return default;
 		}
 		public static explicit operator uint(Tag value)
 		{
-			if (value.getType() == typeof(TagUInt))
+			if (value is TagUInt tag2)
 			{
-				return ((uint)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagUInt");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagUInt");
+			return default;
 		}
 		public static explicit operator ulong(Tag value)
 		{
-			if (value.getType() == typeof(TagULong))
+			if (value is TagULong tag2)
 			{
-				return ((ulong)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagULong");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagULong");
+			return default;
 		}
 #if !NO_GDI
 		public static explicit operator Image(Tag value)
 		{
-			if (value.getType() == typeof(TagImage))
+			if (value is TagImage tag2)
 			{
-				return ((Image)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagImage");
+			NBT_InvalidArgumentException.Throw("TagImage");
+			return default;
 		}
 #endif
 		public static explicit operator IPAddress(Tag value)
 		{
-			if (value.getType() == typeof(TagIP))
+			if (value is TagIP tag2)
 			{
-				return ((IPAddress)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagIPv4");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagIPv4");
+			return default;
 		}
 		public static explicit operator PhysicalAddress(Tag value)
 		{
-			if (value.getType() == typeof(TagMAC))
+			if (value is TagMAC tag2)
 			{
-				return ((PhysicalAddress)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagMAC");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagMAC");
+			return default;
 		}
 		public static explicit operator short[](Tag value)
 		{
-			if (value.getType() == typeof(TagShortArray))
+			if (value is TagShortArray tag2)
 			{
-				return ((short[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagShortArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagShortArray");
+			return default;
 		}
 		public static explicit operator DateTime(Tag value)
 		{
-			if (value.getType() == typeof(DateTime))
+			if (value is TagDateTime tag2)
 			{
-				return ((DateTime)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagDateTime");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagDateTime");
+			return default;
 		}
 		public static explicit operator TimeSpan(Tag value)
 		{
-			if (value.getType() == typeof(TimeSpan))
+			if (value is TagTimeSpan tag2)
 			{
-				return ((TimeSpan)value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagTimeSpan");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagTimeSpan");
+			return default;
 		}
 		public static explicit operator long[](Tag value)
 		{
-			if (value.getType() == typeof(TagLongArray))
+			if (value is TagLongArray tag2)
 			{
-				return ((long[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagLongArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagLongArray");
+			return default;
 		}
 		public static explicit operator float[](Tag value)
 		{
-			if (value.getType() == typeof(TagFloatArray))
+			if (value is TagFloatArray tag2)
 			{
-				return ((float[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagFloatArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagFloatArray");
+			return default;
 		}
 		public static explicit operator double[](Tag value)
 		{
-			if (value.getType() == typeof(TagDoubleArray))
+			if (value is TagDoubleArray tag2)
 			{
-				return ((double[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagDoubleArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagDoubleArray");
+			return default;
 		}
 		public static explicit operator sbyte[](Tag value)
 		{
-			if (value.getType() == typeof(TagSByteArray))
+			if (value is TagSByteArray tag2)
 			{
-				return ((sbyte[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagSByteArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagSByteArray");
+			return default;
 		}
 		public static explicit operator ushort[](Tag value)
 		{
-			if (value.getType() == typeof(TagUShortArray))
+			if (value is TagUShortArray tag2)
 			{
-				return ((ushort[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagUShortArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagUShortArray");
+			return default;
 		}
 		public static explicit operator uint[](Tag value)
 		{
-			if (value.getType() == typeof(TagUIntArray))
+			if (value is TagUIntArray tag2)
 			{
-				return ((uint[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagUIntArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagUIntArray");
+			return default;
 		}
 		public static explicit operator ulong[](Tag value)
 		{
-			if (value.getType() == typeof(TagULongArray))
+			if (value is TagULongArray tag2)
 			{
-				return ((ulong[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagULongArray");
+			NBT_InvalidArgumentException.ThrowInvalidType("TagULongArray");
+			return default;
 		}
 #if !NO_GDI
 		public static explicit operator Image[](Tag value)
 		{
-			if (value.getType() == typeof(TagImageArray))
+			if (value is TagImageArray tag2)
 			{
-				return ((Image[])value.ValueProp);
+				return tag2.value;
 			}
-			throw new NBT_InvalidArgumentException("The parameter must be a TagImageArray");
+			NBT_InvalidArgumentException.Throw("TagImageArray");
+			return default;
 		}
 #endif
 	}

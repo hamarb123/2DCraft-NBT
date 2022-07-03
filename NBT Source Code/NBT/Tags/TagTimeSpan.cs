@@ -4,7 +4,7 @@ using NBT.Exceptions;
 
 namespace NBT.Tags
 {
-	public sealed class TagTimeSpan : Tag, IEquatable<TagTimeSpan>
+	public sealed class TagTimeSpan : Tag, IEquatable<TagTimeSpan>, IFormattable, ISpanFormattable
 	{
 		public TimeSpan value;
 
@@ -19,10 +19,7 @@ namespace NBT.Tags
 
 		internal TagTimeSpan(Stream stream) : this(new TimeSpan(DateTime.Now.Ticks))
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 
@@ -34,15 +31,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(TimeSpan))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (TimeSpan)value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -54,44 +43,52 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value.ToString();
 		}
 
+		public override string ToString(IFormatProvider provider)
+		{
+			return this.value.ToString(null, provider);
+		}
+
+		public string ToString(string format)
+		{
+			return this.value.ToString(format);
+		}
+
+		public string ToString(string format, IFormatProvider provider)
+		{
+			return this.value.ToString(format, provider);
+		}
+
+		public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider provider)
+		{
+			return value.TryFormat(destination, out charsWritten, format, provider);
+		}
+
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagTimeSpan.ReadTimeSpan(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagTimeSpan.WriteTimeSpan(stream, this.value);
 		}
 
 		internal static TimeSpan ReadTimeSpan(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			return new TimeSpan(TagLong.ReadLong(stream));
 		}
 
 		internal static void WriteTimeSpan(Stream stream, TimeSpan value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagLong.WriteLong(stream, value.Ticks);
 		}
 
@@ -105,43 +102,24 @@ namespace NBT.Tags
 			return new TagTimeSpan(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagTimeSpan);
-		}
-
 		public bool Equals(TagTimeSpan other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.Equals(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value == value;
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagTimeSpan other2 && Equals(other2);
+		}
 
-			if (typeof(TagTimeSpan) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagTimeSpan)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagTimeSpan other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return value.GetHashCode();
 		}
 	}
 }

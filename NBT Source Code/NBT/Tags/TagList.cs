@@ -10,7 +10,10 @@ namespace NBT.Tags
 {
 	public sealed class TagList : Tag, IList<Tag>, ICollection<Tag>, IEnumerable<Tag>, IEnumerable, IEquatable<TagList>
 	{
-		private List<Tag> value;
+		/// <summary>
+		/// Don't modify this list directly.
+		/// </summary>
+		public List<Tag> value;
 		private byte typeOfList;
 
 		public TagList(byte idTagType)
@@ -21,10 +24,7 @@ namespace NBT.Tags
 
 		internal TagList(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = new List<Tag>();
 			this.readTag(stream);
 		}
@@ -37,13 +37,10 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
+				NBT_InvalidArgumentNullException.ThrowIfNull(value);
 				if (value.tagID != this.typeOfList)
 				{
-					throw new NBT_InvalidArgumentException("TagType doesn't match.");
+					NBT_InvalidArgumentException.Throw("TagType doesn't match.");
 				}
 				this.value[index] = value;
 			}
@@ -59,7 +56,7 @@ namespace NBT.Tags
 			{
 				if (this.Count > 0)
 				{
-					throw new NBT_InvalidArgumentException("Clear the TagList before changing its TagType.");
+					NBT_InvalidArgumentException.Throw("Clear the TagList before changing its TagType.");
 				}
 				this.typeOfList = value;
 			}
@@ -67,17 +64,14 @@ namespace NBT.Tags
 
 		public void Add(Tag item)
 		{
-			if (item == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(item);
 			if (item.tagID != this.typeOfList)
 			{
-				throw new NBT_InvalidArgumentException("TagType doesn't match.");
+				NBT_InvalidArgumentException.Throw("TagType doesn't match.");
 			}
 			if (this.value.Count == int.MaxValue)
 			{
-				throw new NBT_Exception("List is in the limit.");
+				NBT_Exception.Throw("List is in the limit.");
 			}
 			this.value.Add(item);
 		}
@@ -90,14 +84,19 @@ namespace NBT.Tags
 			}
 		}
 
-		public IEnumerator<Tag> GetEnumerator()
+		public List<Tag>.Enumerator GetEnumerator()
 		{
 			return this.value.GetEnumerator();
 		}
 
+		IEnumerator<Tag> IEnumerable<Tag>.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.value.GetEnumerator();
+			return GetEnumerator();
 		}
 
 		public void Clear()
@@ -143,13 +142,10 @@ namespace NBT.Tags
 
 		public void Insert(int index, Tag item)
 		{
-			if (item == null)
-			{
-				throw new NBT_InvalidArgumentNullException("item");
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(item);
 			if (item.tagID != this.typeOfList)
 			{
-				throw new NBT_InvalidArgumentException("TagType doesn't match.");
+				NBT_InvalidArgumentException.Throw("TagType doesn't match.");
 			}
 			this.value.Insert(index, item);
 		}
@@ -216,13 +212,14 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return "";
 		}
 
 		internal override void readTag(Stream stream)
 		{
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.Clear();
 			this.typeOfList = TagByte.ReadByte(stream);
 			int count = TagInt.ReadInt(stream);
@@ -232,7 +229,7 @@ namespace NBT.Tags
 				Tag item = Tag.ReadTag(stream, this.typeOfList);
 				if (item == null)
 				{
-					throw new NBT_Exception("Unexpected TagEnd.");
+					NBT_Exception.Throw("Unexpected TagEnd.");
 				}
 				this.Add(item);
 			}
@@ -240,6 +237,7 @@ namespace NBT.Tags
 
 		internal override void writeTag(Stream stream)
 		{
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagByte.WriteByte(stream, this.typeOfList);
 			TagInt.WriteInt(stream, this.Count);
 			foreach (Tag tag in this)
@@ -264,11 +262,6 @@ namespace NBT.Tags
 			return list;
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagList);
-		}
-
 		public string getNamedTypeOfList()
 		{
 			return Tag.GetNamedTypeFromId(this.typeOfList);
@@ -279,6 +272,7 @@ namespace NBT.Tags
 			bool bResult = false;
 			try
 			{
+				if (ReferenceEquals(other, this)) return true;
 				if (this.Type == other.Type)
 				{
 					bResult = this.value.SequenceEqual(other.value);
@@ -297,18 +291,21 @@ namespace NBT.Tags
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagList other2 && Equals(other2);
+		}
 
-			if (typeof(TagList) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagList)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagList other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			//use length and first 4 elements only because this should be fast
+			var hash = new HashCode();
+			hash.Add(value.Count);
+			for (int i = 0; i < value.Count && i < 4; i++) hash.Add(value[i]);
+			return hash.ToHashCode();
 		}
 	}
 }

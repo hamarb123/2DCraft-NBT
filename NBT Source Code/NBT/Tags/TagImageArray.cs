@@ -10,25 +10,19 @@ namespace NBT.Tags
 	{
 		public Image[] value;
 
-		public TagImageArray() : this(new Image[0])
+		public TagImageArray() : this(Array.Empty<Image>())
 		{
 		}
 
 		public TagImageArray(Image[] value)
 		{
-			if (value == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(value);
 			this.value = value;
 		}
 
-		internal TagImageArray(Stream stream) : this(new Image[0])
+		internal TagImageArray(Stream stream) : this(Array.Empty<Image>())
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 
@@ -40,15 +34,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(Image[]))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (Image[])value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -60,35 +46,26 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value.ToString();
 		}
 
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagImageArray.ReadImageArray(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagImageArray.WriteImageArray(stream, this.value);
 		}
 
 		internal static Image[] ReadImageArray(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			Image[] buffer = new Image[TagInt.ReadInt(stream)];
 			for (int i = 0; i < buffer.Length; i++)
 			{
@@ -99,10 +76,7 @@ namespace NBT.Tags
 
 		internal static void WriteImageArray(Stream stream, Image[] value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			if (value == null)
 			{
 				TagInt.WriteInt(stream, 0);
@@ -127,43 +101,28 @@ namespace NBT.Tags
 			return new TagImageArray(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagImageArray);
-		}
-
 		public bool Equals(TagImageArray other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.SequenceEqual(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value.AreSameObj(value);
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagImageArray other2 && Equals(other2);
+		}
 
-			if (typeof(TagImageArray) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagImageArray)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagImageArray other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			//use length and first 4 elements only because this should be fast
+			var hash = new HashCode();
+			hash.Add(value.Length);
+			for (int i = 0; i < value.Length && i < 4; i++) hash.Add(value[i]);
+			return hash.ToHashCode();
 		}
 	}
 }

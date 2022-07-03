@@ -24,13 +24,10 @@ namespace NBT.IO.Compression
 		internal static NBTCompressionType CompressionType(Stream stream)
 		{
 			NBTCompressionType result = NBTCompressionType.Uncompressed;
-			if (stream == null)
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
+			if (!stream.CanSeek)
 			{
-				throw new NBT_InvalidArgumentNullException();
-			}
-			if (stream.CanSeek == false)
-			{
-				throw new NBT_IOException("Can't seek in the stream");
+				NBT_IOException.Throw("Can't seek in the stream");
 			}
 			if (NBTCompressionHeaders.IsGzipStream(stream) == true)
 			{
@@ -46,13 +43,10 @@ namespace NBT.IO.Compression
 		internal static bool IsGzipStream(Stream stream)
 		{
 			bool result = false;
-			if (stream == null)
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
+			if (!stream.CanSeek)
 			{
-				throw new NBT_InvalidArgumentNullException();
-			}
-			if (stream.CanSeek == false)
-			{
-				throw new NBT_IOException("Can't seek in the stream");
+				NBT_IOException.Throw("Can't seek in the stream");
 			}
 			long initialOffset = stream.Seek(0, SeekOrigin.Current);
 			if ((stream.ReadByte() == GZIP_Header[0]) && (stream.ReadByte() == GZIP_Header[1]))
@@ -66,20 +60,19 @@ namespace NBT.IO.Compression
 		internal static bool IsZlibStream(Stream stream)
 		{
 			bool result = false;
-			if (stream == null)
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
+			if (!stream.CanSeek)
 			{
-				throw new NBT_InvalidArgumentNullException();
-			}
-			if (stream.CanSeek == false)
-			{
-				throw new NBT_IOException("Can't seek in the stream");
+				NBT_IOException.Throw("Can't seek in the stream");
 			}
 			long initialOffset = stream.Seek(0, SeekOrigin.Current);
 
 			int CMF = stream.ReadByte();
 			int FLG = stream.ReadByte();
 
-			result = ZLibHeader.DecodeHeader(CMF, FLG).IsSupportedZLibStream;
+			if (CMF == -1 || FLG == -1) NBT_EndOfStreamException.Throw();
+
+			result = ZLibHeader.DecodeHeader((byte)CMF, (byte)FLG).IsSupportedZLibStream;
 
 			stream.Seek(initialOffset, SeekOrigin.Begin);
 			return result;

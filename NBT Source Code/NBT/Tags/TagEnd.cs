@@ -20,7 +20,7 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return "";
 		}
@@ -32,21 +32,13 @@ namespace NBT.Tags
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			stream.WriteByte(TagTypes.TagEnd);
 		}
 
 		public override object Clone()
 		{
 			return new TagEnd();
-		}
-
-		public override Type getType()
-		{
-			return typeof(TagEnd);
 		}
 
 		public override object ValueProp
@@ -61,16 +53,24 @@ namespace NBT.Tags
 			}
 		}
 
+		public bool Equals(TagEnd other)
+		{
+			return other is not null;
+		}
+
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagEnd;
+		}
 
-			if (typeof(TagEnd) != other.getType())
-			{
-				bResult = false;
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagEnd other2;
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return 0;
 		}
 	}
 }

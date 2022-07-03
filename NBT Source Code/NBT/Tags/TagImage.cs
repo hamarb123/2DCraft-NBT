@@ -15,15 +15,13 @@ namespace NBT.Tags
 
 		public TagImage(Image value)
 		{
+			NBT_InvalidArgumentNullException.ThrowIfNull(value);
 			this.value = value;
 		}
 
 		internal TagImage(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 		public override object ValueProp
@@ -34,15 +32,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(Image))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (Image)value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -54,39 +44,30 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return "";
 		}
 
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagImage.ReadImage(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagImage.WriteImage(stream, this.value);
 		}
 
 		internal static Image ReadImage(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			byte[] buffer = new byte[TagInt.ReadInt(stream)];
 			if (stream.ReadAll(buffer, 0, buffer.Length) != buffer.Length)
 			{
-				throw new NBT_EndOfStreamException();
+				NBT_EndOfStreamException.Throw();
 			}
 			if (buffer.Length > 0)
 			{
@@ -101,10 +82,7 @@ namespace NBT.Tags
 
 		internal static void WriteImage(Stream stream, Image value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			if (value != null)
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
@@ -133,43 +111,24 @@ namespace NBT.Tags
 			return new TagImage(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagImage);
-		}
-
 		public bool Equals(TagImage other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.Equals(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value == value;
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagImage other2 && Equals(other2);
+		}
 
-			if (typeof(TagImage) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagImage)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagImage other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return value.GetHashCode();
 		}
 	}
 }

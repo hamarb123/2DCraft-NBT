@@ -13,5 +13,6 @@ namespace NBT.Exceptions
 		public NBT_EndOfStreamException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
+		public static void Throw() => throw new NBT_EndOfStreamException();
 	}
 }

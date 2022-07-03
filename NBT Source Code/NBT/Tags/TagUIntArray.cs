@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NBT.Exceptions;
 
 namespace NBT.Tags
@@ -9,25 +10,19 @@ namespace NBT.Tags
 	{
 		public uint[] value;
 
-		public TagUIntArray() : this(new uint[0])
+		public TagUIntArray() : this(Array.Empty<uint>())
 		{
 		}
 
 		public TagUIntArray(uint[] value)
 		{
-			if (value == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(value);
 			this.value = value;
 		}
 
-		internal TagUIntArray(Stream stream) : this(new uint[0])
+		internal TagUIntArray(Stream stream) : this(Array.Empty<uint>())
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 		public override object ValueProp
@@ -38,15 +33,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(uint[]))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (uint[])value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -58,35 +45,26 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value.ToString();
 		}
 
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagUIntArray.ReadUIntegerArray(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagUIntArray.WriteUIntegerArray(stream, this.value);
 		}
 
 		internal static uint[] ReadUIntegerArray(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			uint[] buffer = new uint[TagInt.ReadInt(stream)];
 			for (int i = 0; i < buffer.Length; i++)
 			{
@@ -97,10 +75,7 @@ namespace NBT.Tags
 
 		internal static void WriteUIntegerArray(Stream stream, uint[] value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			if (value == null)
 			{
 				TagInt.WriteInt(stream, 0);
@@ -125,43 +100,29 @@ namespace NBT.Tags
 			return new TagUIntArray(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagUIntArray);
-		}
-
 		public bool Equals(TagUIntArray other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.SequenceEqual(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value.AreSame(value);
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagUIntArray other2 && Equals(other2);
+		}
 
-			if (typeof(TagUIntArray) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagUIntArray)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagUIntArray other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			//use length and first 16 bytes only because this should be fast
+			var hash = new HashCode();
+			hash.Add(value.Length);
+			var sp = MemoryMarshal.Cast<uint, byte>(value.AsSpan());
+			hash.AddBytes(sp[..Math.Min(16, sp.Length)]);
+			return hash.ToHashCode();
 		}
 	}
 }

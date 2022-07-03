@@ -41,10 +41,7 @@ namespace NBT.IO
 				}
 				set
 				{
-					if (value == null)
-					{
-						throw new NBT_InvalidArgumentNullException();
-					}
+					NBT_InvalidArgumentNullException.ThrowIfNull(value);
 					this.rootTagValue = value;
 				}
 			}
@@ -91,10 +88,7 @@ namespace NBT.IO
 				try
 				{
 					bool closeAuxStream = false;
-					if (stream == null)
-					{
-						throw new NBT_InvalidArgumentNullException();
-					}
+					NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 					NBTCompressionType fileCompression = NBTCompressionHeaders.CompressionType(stream);
 					Stream auxStream = null;
 					switch (fileCompression)
@@ -120,12 +114,12 @@ namespace NBT.IO
 					}
 					if (auxStream == null)
 					{
-						throw new NBT_IOException();
+						NBT_IOException.Throw();
 					}
 					byte firstTag = (byte)auxStream.ReadByte();
 					if (firstTag != TagTypes.TagCompound)
 					{
-						throw new NBT_IOException("The first tag must be a TagCompound");
+						NBT_IOException.Throw("The first tag must be a TagCompound");
 					}
 					this.fileType = fileCompression;
 					this.rootTagName = TagString.ReadString(auxStream);
@@ -137,7 +131,7 @@ namespace NBT.IO
 				}
 				catch (Exception ex)
 				{
-					throw new NBT_IOException("Load exception", ex);
+					NBT_IOException.Throw("Load exception", ex);
 				}
 			}
 			/// <summary>
@@ -149,10 +143,7 @@ namespace NBT.IO
 			{
 				try
 				{
-					if (stream == null)
-					{
-						throw new NBT_InvalidArgumentNullException();
-					}
+					NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 					switch (this.fileType)
 					{
 						case NBTCompressionType.Uncompressed:
@@ -187,7 +178,7 @@ namespace NBT.IO
 				}
 				catch (Exception ex)
 				{
-					throw new NBT_IOException("Save exception", ex);
+					NBT_IOException.Throw("Save exception", ex);
 				}
 			}
 			public void Load(string filePath)
@@ -196,7 +187,7 @@ namespace NBT.IO
 				{
 					if (File.Exists(filePath) != true)
 					{
-						throw new NBT_InvalidArgumentException("File not found");
+						NBT_InvalidArgumentException.Throw("File not found");
 					}
 					using (Stream stream = File.OpenRead(filePath))
 					{
@@ -206,7 +197,7 @@ namespace NBT.IO
 				}
 				catch (Exception ex)
 				{
-					throw new NBT_IOException("Load exception", ex);
+					NBT_IOException.Throw("Load exception", ex);
 				}
 			}
 			public void Save(string filePath)
@@ -215,7 +206,7 @@ namespace NBT.IO
 				{
 					if (filePath.Trim().Equals("") == true)
 					{
-						throw new NBT_InvalidArgumentException("Filepath can not be empty");
+						NBT_InvalidArgumentException.Throw("Filepath can not be empty");
 					}
 					using (Stream fStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
 					{
@@ -225,7 +216,7 @@ namespace NBT.IO
 				}
 				catch (Exception ex)
 				{
-					throw new NBT_IOException("Save exception", ex);
+					NBT_IOException.Throw("Save exception", ex);
 				}
 			}
 		#endregion

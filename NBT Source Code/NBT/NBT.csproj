@@ -6,10 +6,9 @@
 		<Product>NBT</Product>
 		<Copyright>Copyright © 2015 (AMolero Software), 2016-2022 (hamarb123)</Copyright>
 		<VersionPrefix>0.9</VersionPrefix>
-		<VersionSuffix>snapshot.4e</VersionSuffix>
+		<VersionSuffix>snapshot.4f</VersionSuffix>
 		<OutputPath>bin\$(Configuration)\</OutputPath>
 		<ProjectGuid>9dd5be34-50d8-4907-91bb-acb14a8f1ae4</ProjectGuid>
-		<DefineConstants>$(DefineConstants),NO_GDI</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
 		<Using Include="NBT.Extra" />
@@ -20,4 +19,10 @@
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
 		<Compile Remove="**\*Image*.cs" />
 	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' != 'net6.0' ">
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+	</ItemGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<DefineConstants>$(DefineConstants),NO_GDI</DefineConstants>
+	</PropertyGroup>
 </Project>

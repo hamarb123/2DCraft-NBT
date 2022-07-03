@@ -4,7 +4,7 @@ using NBT.Exceptions;
 
 namespace NBT.Tags
 {
-	public sealed class TagUInt : Tag, IEquatable<TagUInt>
+	public sealed class TagUInt : Tag, IEquatable<TagUInt>, IFormattable, ISpanFormattable
 	{
 		public uint value;
 
@@ -19,10 +19,7 @@ namespace NBT.Tags
 
 		internal TagUInt(Stream stream) : this((uint)0)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 
@@ -34,15 +31,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(uint))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (uint)value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -54,39 +43,50 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value.ToString();
 		}
 
+		public override string ToString(IFormatProvider provider)
+		{
+			return this.value.ToString(provider);
+		}
+
+		public string ToString(string format)
+		{
+			return this.value.ToString(format);
+		}
+
+		public string ToString(string format, IFormatProvider provider)
+		{
+			return this.value.ToString(format, provider);
+		}
+
+		public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider provider)
+		{
+			return value.TryFormat(destination, out charsWritten, format, provider);
+		}
+
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagUInt.ReadUInt(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagUInt.WriteUInt(stream, this.value);
 		}
 
 		internal static uint ReadUInt(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			Span<byte> buffer = stackalloc byte[4];
 			if (stream.ReadAll(buffer) != buffer.Length)
 			{
-				throw new NBT_EndOfStreamException();
+				NBT_EndOfStreamException.Throw();
 			}
 			if (BitConverter.IsLittleEndian)
 			{
@@ -97,14 +97,11 @@ namespace NBT.Tags
 
 		internal static void WriteUInt(Stream stream, uint value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			Span<byte> bytes = stackalloc byte[4];
 			if (!BitConverter.TryWriteBytes(bytes, value))
 			{
-				throw new Exception("Failed to write bytes.");
+				Helper.ThrowFailedToWriteBytes();
 			}
 			if (BitConverter.IsLittleEndian == true)
 			{
@@ -123,43 +120,24 @@ namespace NBT.Tags
 			return new TagUInt(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagUInt);
-		}
-
 		public bool Equals(TagUInt other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.Equals(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value == value;
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagUInt other2 && Equals(other2);
+		}
 
-			if (typeof(TagUInt) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagUInt)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagUInt other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return value.GetHashCode();
 		}
 	}
 }

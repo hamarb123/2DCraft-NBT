@@ -18,15 +18,13 @@ namespace NBT.Tags
 
 		public TagString(string value)
 		{
+			NBT_InvalidArgumentNullException.ThrowIfNull(value);
 			this.value = value;
 		}
 
 		internal TagString(Stream stream) : this("")
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 
@@ -38,35 +36,26 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value;
 		}
 
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagString.ReadString(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagString.WriteString(stream, this.value);
 		}
 
 		internal static string ReadString(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			var size = TagUShort.ReadUShort(stream);
 			if (size == 0)
 			{
@@ -77,7 +66,7 @@ namespace NBT.Tags
 				Span<byte> allocation = stackalloc byte[size];
 				if (stream.ReadAll(allocation) != size)
 				{
-					throw new NBT_EndOfStreamException();
+					NBT_EndOfStreamException.Throw();
 				}
 				return Encoding.UTF8.GetString(allocation);
 			}
@@ -88,7 +77,7 @@ namespace NBT.Tags
 				{
 					if (stream.ReadAll(arr, 0, size) != size)
 					{
-						throw new NBT_EndOfStreamException();
+						NBT_EndOfStreamException.Throw();
 					}
 					return Encoding.UTF8.GetString(arr, 0, size);
 				}
@@ -101,10 +90,7 @@ namespace NBT.Tags
 
 		internal static void WriteString(Stream stream, string value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			if (value == string.Empty) //special case
 			{
 				TagUShort.WriteUShort(stream, 0);
@@ -114,7 +100,7 @@ namespace NBT.Tags
 			var maxSize = Encoding.UTF8.GetMaxByteCount(value.Length);
 			if (maxSize > ushort.MaxValue && (size = Encoding.UTF8.GetByteCount(value)) > ushort.MaxValue)
 			{
-				throw new NBT_InvalidArgumentException("String is too long");
+				NBT_InvalidArgumentException.Throw("String is too long");
 			}
 			if (maxSize <= 1024 || (size = Encoding.UTF8.GetByteCount(value)) <= 1024)
 			{
@@ -149,11 +135,6 @@ namespace NBT.Tags
 			return new TagString(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagString);
-		}
-
 		public override object ValueProp
 		{
 			get
@@ -162,50 +143,28 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(string))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (string)value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
 		public bool Equals(TagString other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.Equals(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value == value;
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagString other2 && Equals(other2);
+		}
 
-			if (typeof(TagString) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagString)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagString other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return value.GetHashCode();
 		}
 	}
 }

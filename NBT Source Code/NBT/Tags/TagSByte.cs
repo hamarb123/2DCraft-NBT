@@ -4,7 +4,7 @@ using NBT.Exceptions;
 
 namespace NBT.Tags
 {
-	public sealed class TagSByte : Tag, IEquatable<TagSByte>
+	public sealed class TagSByte : Tag, IEquatable<TagSByte>, IFormattable, ISpanFormattable
 	{
 		public SByte value;
 
@@ -19,10 +19,7 @@ namespace NBT.Tags
 
 		internal TagSByte(Stream stream) : this((sbyte)0)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 
@@ -34,15 +31,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(sbyte))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (sbyte)value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -54,49 +43,57 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value.ToString();
 		}
 
+		public override string ToString(IFormatProvider provider)
+		{
+			return this.value.ToString(provider);
+		}
+
+		public string ToString(string format)
+		{
+			return this.value.ToString(format);
+		}
+
+		public string ToString(string format, IFormatProvider provider)
+		{
+			return this.value.ToString(format, provider);
+		}
+
+		public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider provider)
+		{
+			return value.TryFormat(destination, out charsWritten, format, provider);
+		}
+
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagSByte.ReadSByte(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagSByte.WriteSByte(stream, this.value);
 		}
 
 		internal static sbyte ReadSByte(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			int num = stream.ReadByte();
 			if (num == -1)
 			{
-				throw new NBT_EndOfStreamException();
+				NBT_EndOfStreamException.Throw();
 			}
 			return (sbyte)num;
 		}
 
 		internal static void WriteSByte(Stream stream, sbyte value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			stream.WriteByte((byte)value);
 		}
 
@@ -110,43 +107,24 @@ namespace NBT.Tags
 			return new TagSByte(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagSByte);
-		}
-
 		public bool Equals(TagSByte other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.Equals(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			return other != null && other.value == value;
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagSByte other2 && Equals(other2);
+		}
 
-			if (typeof(TagSByte) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagSByte)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagSByte other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return value.GetHashCode();
 		}
 	}
 }

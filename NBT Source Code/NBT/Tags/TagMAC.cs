@@ -15,15 +15,13 @@ namespace NBT.Tags
 
 		public TagMAC(PhysicalAddress value)
 		{
+			NBT_InvalidArgumentNullException.ThrowIfNull(value);
 			this.value = value;
 		}
 
 		internal TagMAC(Stream stream) : this(new PhysicalAddress(new byte[6] { 0, 0, 0, 0, 0, 0 }))
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.readTag(stream);
 		}
 
@@ -35,15 +33,7 @@ namespace NBT.Tags
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new NBT_InvalidArgumentNullException();
-				}
-				if (value.GetType() != typeof(PhysicalAddress))
-				{
-					throw new NBT_InvalidArgumentException();
-				}
-				this.value = (PhysicalAddress)value;
+				Helper.ValuePropHelper(ref this.value, value);
 			}
 		}
 
@@ -55,39 +45,30 @@ namespace NBT.Tags
 			}
 		}
 
-		public override string toString()
+		public override string ToString()
 		{
 			return this.value.ToString();
 		}
 
 		internal override void readTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			this.value = TagMAC.ReadMAC(stream);
 		}
 
 		internal override void writeTag(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			TagMAC.WriteMAC(stream, this.value);
 		}
 
 		internal static PhysicalAddress ReadMAC(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			byte[] buffer = new byte[6];
 			if (stream.ReadAll(buffer, 0, buffer.Length) != buffer.Length)
 			{
-				throw new NBT_EndOfStreamException();
+				Helper.ThrowFailedToWriteBytes();
 			}
 			if (BitConverter.IsLittleEndian == true)
 			{
@@ -98,10 +79,7 @@ namespace NBT.Tags
 
 		internal static void WriteMAC(Stream stream, PhysicalAddress value)
 		{
-			if (stream == null)
-			{
-				throw new NBT_InvalidArgumentNullException();
-			}
+			NBT_InvalidArgumentNullException.ThrowIfNull(stream);
 			byte[] bytes;
 			if (value == null)
 			{
@@ -128,43 +106,26 @@ namespace NBT.Tags
 			return new TagMAC(value);
 		}
 
-		public override Type getType()
-		{
-			return typeof(TagMAC);
-		}
-
 		public bool Equals(TagMAC other)
 		{
-			bool bResult = false;
-			try
-			{
-				bResult = this.value.Equals(other.value);
-			}
-			catch (ArgumentNullException nullEx)
-			{
-				throw new NBT_InvalidArgumentNullException(nullEx.Message, nullEx.InnerException);
-			}
-			catch (Exception ex)
-			{
-				throw new NBT_InvalidArgumentException(ex.Message, ex.InnerException);
-			}
-			return bResult;
+			if (other == null) return false;
+			if ((other.value == null) ^ (value == null)) return false;
+			return value.Equals(other.value);
 		}
 
 		public override bool Equals(Tag other)
 		{
-			bool bResult = true;
+			return other is TagMAC other2 && Equals(other2);
+		}
 
-			if (typeof(TagMAC) != other.getType())
-			{
-				bResult = false;
-			}
-			else
-			{
-				bResult = this.Equals((TagMAC)other);
-			}
+		public override bool Equals(object obj)
+		{
+			return obj is TagMAC other2 && Equals(other2);
+		}
 
-			return bResult;
+		public override int GetHashCode()
+		{
+			return value.GetHashCode();
 		}
 	}
 }

@@ -15,5 +15,9 @@ namespace NBT.Exceptions
 		public NBT_IOException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
+
+		public static void Throw() => throw new NBT_IOException();
+		public static void Throw(string message) => throw new NBT_IOException(message);
+		public static void Throw(string message, Exception innerException) => throw new NBT_IOException(message, innerException);
 	}
 }

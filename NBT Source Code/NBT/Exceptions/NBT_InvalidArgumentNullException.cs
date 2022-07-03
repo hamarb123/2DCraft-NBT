@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace NBT.Exceptions
 {
@@ -12,6 +13,10 @@ namespace NBT.Exceptions
 		}
 		public NBT_InvalidArgumentNullException(string message, Exception innerException) : base(message, innerException)
 		{
+		}
+		public static void ThrowIfNull<T>(T value, [CallerArgumentExpression("value")] string valueExpression = null)
+		{
+			if (value is null) throw new NBT_InvalidArgumentNullException("'" + valueExpression + "' was null.");
 		}
 	}
 }

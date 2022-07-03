@@ -11,6 +11,7 @@ using System.Text;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using NBT.Exceptions;
 
 namespace NBT.IO.Compression.ZLIB
 {
@@ -134,7 +135,7 @@ namespace NBT.IO.Compression.ZLIB
 				}
 				else
 				{
-					throw new InvalidOperationException();
+					Helper.ThrowInvalidOperationException();
 				}
 
 				return result;
@@ -159,7 +160,7 @@ namespace NBT.IO.Compression.ZLIB
 				}
 				else
 				{
-					throw new InvalidOperationException();
+					Helper.ThrowInvalidOperationException();
 				}
 
 				return result;
@@ -174,7 +175,7 @@ namespace NBT.IO.Compression.ZLIB
 				}
 				else
 				{
-					throw new InvalidOperationException();
+					Helper.ThrowInvalidOperationException();
 				}
 			}
 
@@ -187,7 +188,7 @@ namespace NBT.IO.Compression.ZLIB
 				}
 				else
 				{
-					throw new InvalidOperationException();
+					Helper.ThrowInvalidOperationException();
 				}
 			}
 
@@ -226,7 +227,7 @@ namespace NBT.IO.Compression.ZLIB
 				}
 				else
 				{
-					throw new InvalidOperationException("Stream already closed");
+					Helper.ThrowInvalidOperationException("Stream already closed");
 				}
 			}
 
@@ -264,7 +265,7 @@ namespace NBT.IO.Compression.ZLIB
 				//Comprobamos si la secuencia esta en la posición 0, de no ser así, lanzamos una excepción
 				if (stream.Position != 0)
 				{
-					throw new ArgumentOutOfRangeException("Sequence must be at position 0");
+					Helper.ThrowArgumentOutOfRangeException("Sequence must be at position 0");
 				}
 
 				//Comprobamos si podemos realizar la lectura de los dos bytes que conforman la cabecera
@@ -272,9 +273,10 @@ namespace NBT.IO.Compression.ZLIB
 				{
 					CMF = stream.ReadByte();
 					Flag = stream.ReadByte();
+					if (CMF == -1 || Flag == -1) NBT_EndOfStreamException.Throw();
 					try
 					{
-						header = ZLibHeader.DecodeHeader(CMF, Flag);
+						header = ZLibHeader.DecodeHeader((byte)CMF, (byte)Flag);
 						bResult = header.IsSupportedZLibStream;
 					}
 					catch
@@ -294,7 +296,7 @@ namespace NBT.IO.Compression.ZLIB
 				this.mRawStream.Seek(-4, SeekOrigin.End);
 				if (this.mRawStream.ReadAll(this.mCRC, 0, 4) < 4)
 				{
-					throw new EndOfStreamException();
+					Helper.ThrowEndOfStreamException();
 				}
 
 				if (BitConverter.IsLittleEndian == true)
@@ -307,7 +309,7 @@ namespace NBT.IO.Compression.ZLIB
 
 				if (crcStream != crcAdler)
 				{
-					throw new Exception("CRC mismatch");
+					Helper.ThrowException("CRC mismatch");
 				}
 			}
 		#endregion
@@ -329,7 +331,7 @@ namespace NBT.IO.Compression.ZLIB
 						{
 							if (ZLIBStream.IsZLibStream(this.mRawStream) == false)
 							{
-								throw new InvalidDataException();
+								Helper.ThrowInvalidDataException();
 							}
 							this.mDeflateStream = new DeflateStream(this.mRawStream, CompressionMode.Decompress, true);
 							break;

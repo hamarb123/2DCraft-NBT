@@ -13,5 +13,8 @@ namespace NBT.Exceptions
 		public NBT_InvalidArgumentException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
+		public static void ThrowInvalidType(string typeName) => throw new NBT_InvalidArgumentException($"The parameter must be a { typeName }");
+		public static void Throw() => throw new NBT_InvalidArgumentException();
+		public static void Throw(string message) => throw new NBT_InvalidArgumentException(message);
 	}
 }

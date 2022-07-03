@@ -52,7 +52,7 @@ namespace NBT.IO.Compression.ZLIB
 				{
 					if (value > 15)
 					{
-						throw new ArgumentOutOfRangeException("Argument cannot be greater than 15");
+						Helper.ThrowArgumentOutOfRangeException("Argument cannot be greater than 15");
 					}
 					this.mCompressionMethod = value;
 				}
@@ -67,7 +67,7 @@ namespace NBT.IO.Compression.ZLIB
 				{
 					if (value > 15)
 					{
-						throw new ArgumentOutOfRangeException("Argument cannot be greater than 15");
+						Helper.ThrowArgumentOutOfRangeException("Argument cannot be greater than 15");
 					}
 					this.mCompressionInfo = value;
 				}
@@ -82,7 +82,7 @@ namespace NBT.IO.Compression.ZLIB
 				{
 					if (value > 31)
 					{
-						throw new ArgumentOutOfRangeException("Argument cannot be greater than 31");
+						Helper.ThrowArgumentOutOfRangeException("Argument cannot be greater than 31");
 					}
 					this.mFCheck = value;
 				}
@@ -119,19 +119,18 @@ namespace NBT.IO.Compression.ZLIB
 		#region "Metodos privados"
 			private void RefreshFCheck()
 			{
-				string bitsFLG = Convert.ToString(Convert.ToByte(this.FLevel), 2).PadLeft(2, '0') + Convert.ToString(Convert.ToByte(this.FDict), 2);
-				byte byteFLG = Convert.ToByte(bitsFLG, 2);
-				this.FCheck = Convert.ToByte(31 - Convert.ToByte((this.GetCMF() * 256 + byteFLG) % 31));
+				byte byteFLG = (byte)(((int)FLevel << 1) | (FDict ? 1 : 0));
+				this.FCheck = (byte)(31 - (byte)((this.GetCMF() * 256 + byteFLG) % 31));
 			}
 			private byte GetCMF()
 			{
-				string bitsCMF = Convert.ToString(this.CompressionInfo, 2).PadLeft(4, '0') + Convert.ToString(this.CompressionMethod, 2).PadLeft(4, '0');
-				return Convert.ToByte(bitsCMF, 2);
+				byte byteCMF = (byte)((CompressionInfo << 4) | CompressionMethod);
+				return byteCMF;
 			}
 			private byte GetFLG()
 			{
-				string bitsFLG = Convert.ToString(Convert.ToByte(this.FLevel), 2).PadLeft(2, '0') + Convert.ToString(Convert.ToByte(this.FDict), 2) + Convert.ToString(this.FCheck, 2).PadLeft(5, '0');
-				return Convert.ToByte(bitsFLG, 2);
+				byte byteFLG = (byte)(((int)FLevel << 6) | (FDict ? 32 : 0) | FCheck);
+				return byteFLG;
 			}
 		#endregion
 		#region "Metodos publicos"
@@ -148,28 +147,25 @@ namespace NBT.IO.Compression.ZLIB
 			}
 		#endregion
 		#region "Metodos estáticos"
-			public static ZLibHeader DecodeHeader(int pCMF, int pFlag)
+			public static ZLibHeader DecodeHeader(byte pCMF, byte pFlag)
 			{
 				ZLibHeader result = new ZLibHeader();
 
 				if ((pCMF < byte.MinValue) || (pCMF > byte.MaxValue))
 				{
-					throw new ArgumentOutOfRangeException("Argument 'CMF' must be a byte");
+					Helper.ThrowArgumentOutOfRangeException("Argument 'CMF' must be a byte");
 				}
 				if ((pFlag < byte.MinValue) || (pFlag > byte.MaxValue))
 				{
-					throw new ArgumentOutOfRangeException("Argument 'Flag' must be a byte");
+					Helper.ThrowArgumentOutOfRangeException("Argument 'Flag' must be a byte");
 				}
 
-				string bitsCMF = Convert.ToString(pCMF, 2).PadLeft(8, '0');
-				string bitsFlag = Convert.ToString(pFlag, 2).PadLeft(8, '0');
+				result.CompressionInfo = (byte)(pCMF >> 4);
+				result.CompressionMethod = (byte)(pCMF & 15);
 
-				result.CompressionInfo = Convert.ToByte(bitsCMF.Substring(0, 4), 2);
-				result.CompressionMethod = Convert.ToByte(bitsCMF.Substring(4, 4), 2);
-
-				result.FCheck = Convert.ToByte(bitsFlag.Substring(3, 5), 2);
-				result.FDict = Convert.ToBoolean(Convert.ToByte(bitsFlag.Substring(2, 1), 2));
-				result.FLevel = (FLevel)Convert.ToByte(bitsFlag.Substring(0, 2), 2);
+				result.FCheck = (byte)(pFlag & 31);
+				result.FDict = ((pFlag >> 5) & 1) == 1;
+				result.FLevel = (FLevel)(pFlag >> 6);
 
 				result.IsSupportedZLibStream = (result.CompressionMethod == 8) && (result.CompressionInfo == 7) && (((pCMF * 256 + pFlag) % 31 == 0)) && (result.FDict == false);
 
